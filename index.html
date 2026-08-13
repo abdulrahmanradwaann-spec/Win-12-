@@ -5,7 +5,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, viewport-fit=cover">
     <title>Windows 12 Concept</title>
     <link rel="icon" href="https://raw.githubusercontent.com/immobilesmile70/Windows-12-web/main/assets/favicon.ico"
         type="image/x-icon" />
@@ -81,19 +81,19 @@
             </div>
             <div id="enter_pass" class="passflex">
                 <img id="User_Icon" draggable="false" style="user-select: none;" />
-                <div id="User_Name" class="username" style="user-select: none;">Abdulrahman Radwan</div>
+                <div id="User_Name" class="username" style="user-select: none;">Welcome back</div>
                 <input type="file" id="avatar_input" accept="image/*" style="display: none;" />
                 <form id="login_form" class="login-form" style="user-select: none;" autocomplete="off">
                     <div id="signin_mode" class="login-mode">
                         <input type="email" id="login_email" class="pass" placeholder="Email" autocomplete="off" />
                         <input type="password" id="password" class="pass" placeholder="Password" autocomplete="off" />
-                        <button type="submit" class="login-btn">Sign in</button>
+                        <button type="submit" id="signin_btn" class="login-btn">Sign in</button>
                     </div>
                     <div id="signup_mode" class="login-mode" style="display: none;">
                         <input type="text" id="signup_name" class="pass" placeholder="Full name" autocomplete="off" />
                         <input type="email" id="signup_email" class="pass" placeholder="Email" autocomplete="off" />
                         <input type="password" id="signup_password" class="pass" placeholder="Password" autocomplete="off" />
-                        <button type="submit" class="login-btn">Create account</button>
+                        <button type="submit" id="signup_btn" class="login-btn">Create account</button>
                     </div>
                 </form>
                 <div id="login_error" class="login-error" style="display: none;"></div>
@@ -101,6 +101,7 @@
                 <button id="not_you_btn" class="switch-account" style="display: none;">Not you?</button>
                 <button id="shutbut2" style="user-select: none;" class="shutdown-button"
                     style="background-size: 30px 30px; border-radius: 10px; height: 60px; width: 60px;"></button>
+                <button id="lang_toggle" class="lang-toggle" title="Language">ع</button>
             </div>
 
         </div>
@@ -199,7 +200,7 @@
                     <img draggable="false"
                         src="https://raw.githubusercontent.com/immobilesmile70/Windows-12-web/main/assets/Backgrounds/Default%20Profile%20Photo.webp?raw=true"
                         alt="Chip Icon" class="chip-icon">
-                    <span class="chip-text">Abdulrahman Radwan</span>
+                    <span class="chip-text">سجل حسابك</span>
                 </div>
 
                 <button id="shutbut" class="shutdown-button"></button>

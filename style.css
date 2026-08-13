@@ -980,6 +980,31 @@ input.pass:hover {
     background-color: rgba(50, 50, 50, 0.4);
 }
 
+.lang-toggle {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    background-color: rgba(70, 70, 70, 0.3);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: background-color 0.3s ease, transform 0.15s ease;
+}
+
+.lang-toggle:hover {
+    background-color: rgba(50, 50, 50, 0.4);
+}
+
+.lang-toggle:active {
+    transform: scale(0.88);
+}
+
 .start-menu::before {
     content: '';
     position: absolute;
@@ -2594,5 +2619,210 @@ canvas {
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+/* =========================================================
+   Mobile & Touch Responsive
+   ========================================================= */
+html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+body {
+    touch-action: manipulation;
+}
+
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Cap windows so they never exceed the viewport */
+@media (max-width: 820px) {
+    .app-window {
+        max-width: calc(100vw - 16px) !important;
+        max-height: calc(100vh - 72px) !important;
+    }
+}
+
+/* Phones */
+@media (max-width: 600px) {
+    body {
+        height: 100dvh;
+        min-height: 100dvh;
+    }
+
+    /* ---- Welcome / power screen ---- */
+    #user-start_screen p {
+        display: none;
+    }
+
+    /* ---- Lock screen ---- */
+    .timeText {
+        font-size: 4rem;
+        top: 22px;
+    }
+
+    .dateText {
+        font-size: 1.15rem;
+    }
+
+    #User_Icon {
+        width: 108px;
+        height: 108px;
+        margin-bottom: 10px;
+    }
+
+    .username {
+        font-size: 1.5rem;
+        margin-bottom: 12px;
+    }
+
+    .login-form {
+        width: min(300px, 84vw);
+    }
+
+    .login-form .pass {
+        font-size: 1rem;
+    }
+
+    .login-error {
+        max-width: 84vw;
+        font-size: 0.85rem;
+    }
+
+    .switch-account {
+        font-size: 0.8rem;
+    }
+
+    .tex {
+        bottom: 30px;
+        font-size: 17px;
+    }
+
+    .shutdown-button {
+        width: 44px !important;
+        height: 44px !important;
+        right: 10px;
+        bottom: 10px;
+        background-size: 20px 20px;
+    }
+
+    .lang-toggle {
+        top: 10px;
+        right: 10px;
+        width: 38px;
+        height: 38px;
+    }
+
+    /* ---- Welcome / power screen ---- */
+    .startPc {
+        width: 70px;
+        height: 76px;
+        background-size: 78px;
+        border-radius: 18px;
+    }
+
+    #user-start_screen p {
+        font-size: 0.85rem !important;
+        bottom: 16px !important;
+        padding: 0 16px;
+        box-sizing: border-box;
+    }
+
+    /* ---- Taskbar ---- */
+    .taskbar {
+        height: 46px;
+        bottom: 6px;
+        width: calc(100% - 12px);
+        padding: 0 6px;
+        border-radius: 10px;
+    }
+
+    .taskbar-flex {
+        left: 32px;
+        gap: 3px;
+        width: calc(100% - 118px);
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
+
+    .taskbar-flex::-webkit-scrollbar {
+        display: none;
+    }
+
+    .tile {
+        width: 33px;
+        height: 33px;
+        flex-shrink: 0;
+    }
+
+    .taskbar-logo {
+        width: 40px;
+    }
+
+    .windows-logo {
+        width: 26px;
+        height: 26px;
+    }
+
+    .taskbar-clock {
+        width: 48px;
+        font-size: 0.8rem;
+        margin-right: 3px;
+    }
+
+    /* ---- Start menu ---- */
+    .start-menu {
+        box-sizing: border-box;
+        width: calc(100vw - 20px);
+        left: 10px;
+        bottom: 60px;
+        height: min(430px, calc(100vh - 80px));
+    }
+
+    /* ---- Short / landscape phones ---- */
+    @media (max-height: 500px) {
+        .timeText {
+            font-size: 2.8rem;
+            top: 8px;
+        }
+
+        .dateText {
+            font-size: 1rem;
+        }
+
+        #User_Icon {
+            width: 78px;
+            height: 78px;
+            margin-bottom: 6px;
+        }
+
+        .username {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+        }
+
+        .login-form {
+            margin-bottom: 8px;
+        }
+
+        .login-mode {
+            gap: 6px;
+        }
+
+        .login-form .pass {
+            height: 34px;
+        }
+
+        .login-btn {
+            height: 36px;
+        }
+
+        .shutdown-button {
+            width: 38px !important;
+            height: 38px !important;
+        }
     }
 }

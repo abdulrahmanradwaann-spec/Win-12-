@@ -26,6 +26,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const loginError = document.getElementById("login_error");
     const modeToggle = document.getElementById("mode_toggle");
     const notYouBtn = document.getElementById("not_you_btn");
+    const langToggle = document.getElementById("lang_toggle");
+    const signinBtn = document.getElementById("signin_btn");
+    const signupBtn = document.getElementById("signup_btn");
     const avatarInput = document.getElementById("avatar_input");
     const clickSound = document.getElementById("button-click");
     const startSound = document.getElementById("startup");
@@ -87,9 +90,42 @@ document.addEventListener("DOMContentLoaded", () => {
     const SESSION_KEY = "win12_session";
     const DEFAULT_PROFILE_PHOTO = "https://raw.githubusercontent.com/immobilesmile70/Windows-12-web/main/assets/Backgrounds/Default%20Profile%20Photo.webp?raw=true";
     let currentAccount = null;
-    let currentUserName = "Abdulrahman Radwan";
+    let currentUserName = "سجل حسابك";
     let draftPicture = "";
     let loginMode = "signin";
+
+    // Language (English / Arabic)
+    const LANG_KEY = "win12_lang";
+    const TXT = {
+        headingSignin: { en: "Welcome back", ar: "مرحباً بعودتك" },
+        headingSignup: { en: "Create your account", ar: "أنشئ حسابك" },
+        emailPh: { en: "Email", ar: "البريد الإلكتروني" },
+        passPh: { en: "Password", ar: "كلمة المرور" },
+        namePh: { en: "Full name", ar: "الاسم الكامل" },
+        signinBtn: { en: "Sign in", ar: "تسجيل الدخول" },
+        createBtn: { en: "Create account", ar: "إنشاء حساب" },
+        toSignup: { en: "Don't have an account? Create one", ar: "ليس لديك حساب؟ أنشئ واحداً" },
+        toSignin: { en: "Already have an account? Sign in", ar: "لديك حساب بالفعل؟ سجّل الدخول" },
+        notYou: { en: "Not you?", ar: "ليس أنت؟" },
+        errEmpty: { en: "Please enter your email and password.", ar: "يرجى إدخال البريد الإلكتروني وكلمة المرور." },
+        errIncorrect: { en: "Incorrect email or password.", ar: "البريد الإلكتروني أو كلمة المرور غير صحيحة." },
+        errName: { en: "Please enter your full name.", ar: "يرجى إدخال اسمك الكامل." },
+        errEmail: { en: "Please enter a valid email address.", ar: "يرجى إدخال بريد إلكتروني صالح." },
+        errPass: { en: "Password must be at least 4 characters.", ar: "يجب أن تكون كلمة المرور 4 أحرف على الأقل." },
+        errExists: { en: "An account with this email already exists.", ar: "يوجد حساب بهذا البريد الإلكتروني بالفعل." },
+    };
+    let lang = detectLang();
+
+    function detectLang() {
+        const saved = localStorage.getItem(LANG_KEY);
+        if (saved === "en" || saved === "ar") return saved;
+        return (navigator.language || "en").toLowerCase().startsWith("ar") ? "ar" : "en";
+    }
+
+    function t(key) {
+        const entry = TXT[key];
+        return entry ? (entry[lang] || entry.en) : key;
+    }
 
     function loadAccounts() {
         try {
@@ -349,10 +385,32 @@ document.addEventListener("DOMContentLoaded", () => {
         loginMode = mode;
         signinMode.style.display = mode === "signin" ? "flex" : "none";
         signupMode.style.display = mode === "signup" ? "flex" : "none";
-        modeToggle.textContent = mode === "signin"
-            ? "Don't have an account? Create one"
-            : "Already have an account? Sign in";
+        modeToggle.textContent = mode === "signin" ? t("toSignup") : t("toSignin");
+        if (!currentAccount) {
+            userName.textContent = mode === "signin" ? t("headingSignin") : t("headingSignup");
+        }
         hideLoginError();
+    }
+
+    function applyLoginTexts() {
+        loginEmail.placeholder = t("emailPh");
+        passwordInput.placeholder = t("passPh");
+        signupName.placeholder = t("namePh");
+        signupEmail.placeholder = t("emailPh");
+        signupPassword.placeholder = t("passPh");
+        signinBtn.textContent = t("signinBtn");
+        signupBtn.textContent = t("createBtn");
+        notYouBtn.textContent = t("notYou");
+        langToggle.textContent = lang === "ar" ? "EN" : "ع";
+        document.documentElement.lang = lang;
+        passLock.dir = lang === "ar" ? "rtl" : "ltr";
+    }
+
+    function setLang(next) {
+        lang = next === "ar" ? "ar" : "en";
+        localStorage.setItem(LANG_KEY, lang);
+        applyLoginTexts();
+        if (loginMode) setLoginMode(loginMode);
     }
 
     function doSignIn() {
@@ -360,13 +418,13 @@ document.addEventListener("DOMContentLoaded", () => {
         const pass = passwordInput.value;
 
         if (!email || !pass) {
-            showLoginError("Please enter your email and password.");
+            showLoginError(t("errEmpty"));
             return;
         }
 
         const account = loadAccounts().find((a) => a.email.toLowerCase() === email);
         if (!account || account.password !== pass) {
-            showLoginError("Incorrect email or password.");
+            showLoginError(t("errIncorrect"));
             passwordInput.value = "";
             return;
         }
@@ -383,21 +441,21 @@ document.addEventListener("DOMContentLoaded", () => {
         const pass = signupPassword.value;
 
         if (!name) {
-            showLoginError("Please enter your full name.");
+            showLoginError(t("errName"));
             return;
         }
         if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            showLoginError("Please enter a valid email address.");
+            showLoginError(t("errEmail"));
             return;
         }
         if (!pass || pass.length < 4) {
-            showLoginError("Password must be at least 4 characters.");
+            showLoginError(t("errPass"));
             return;
         }
 
         const accounts = loadAccounts();
         if (accounts.some((a) => a.email.toLowerCase() === email)) {
-            showLoginError("An account with this email already exists.");
+            showLoginError(t("errExists"));
             return;
         }
 
@@ -445,6 +503,12 @@ document.addEventListener("DOMContentLoaded", () => {
         field.addEventListener("input", hideLoginError);
     });
 
+    langToggle.addEventListener("click", () => {
+        clickSound.volume = 0.1;
+        clickSound.play();
+        setLang(lang === "ar" ? "en" : "ar");
+    });
+
     userIcon.addEventListener("click", () => {
         if (loginMode === "signup") {
             avatarInput.click();
@@ -484,7 +548,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function applyProfile(profile) {
-        currentUserName = profile.name || "Abdulrahman Radwan";
+        currentUserName = profile.name || "سجل حسابك";
         userName.textContent = currentUserName;
         chipText.textContent = currentUserName;
         const pic = profile.picture || DEFAULT_PROFILE_PHOTO;
@@ -493,8 +557,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function applyDefaultProfile() {
-        currentUserName = "Abdulrahman Radwan";
-        userName.textContent = currentUserName;
+        currentUserName = "سجل حسابك";
+        userName.textContent = loginMode === "signin" ? t("headingSignin") : t("headingSignup");
         chipText.textContent = currentUserName;
         userIcon.removeAttribute("src");
         chipIcon.src = DEFAULT_PROFILE_PHOTO;
@@ -503,6 +567,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function setupLockScreen() {
         const accounts = loadAccounts();
         draftPicture = "";
+        applyLoginTexts();
 
         if (currentAccount) {
             applyProfile(currentAccount);
@@ -915,6 +980,39 @@ document.addEventListener("DOMContentLoaded", () => {
     let tileOrder = [];
     const ttaskbar = document.querySelector('.taskbar-flex');
 
+    function isMobileView() {
+        return window.matchMedia("(max-width: 820px)").matches;
+    }
+
+    function fitMobileWindow(windowElement) {
+        if (!windowElement || !isMobileView()) return;
+        if (windowElement.classList.contains("minimized") || windowElement.classList.contains("hidden")) return;
+
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+        const pad = 8;
+        const tb = 66;
+        const maxW = vw - pad * 2;
+        const maxH = vh - tb;
+
+        let w = windowElement.offsetWidth || 0;
+        let h = windowElement.offsetHeight || 0;
+        if (w > maxW) w = maxW;
+        if (h > maxH) h = maxH;
+
+        windowElement.style.width = `${w}px`;
+        windowElement.style.height = `${h}px`;
+        windowElement.style.left = `${Math.max(pad, Math.round((vw - w) / 2))}px`;
+        windowElement.style.top = `${Math.max(pad, Math.round((vh - tb - h) / 2) + pad)}px`;
+    }
+
+    window.addEventListener("resize", () => {
+        if (!isMobileView()) return;
+        document.querySelectorAll(".app-window.open:not(.hidden):not(.minimized)").forEach((w) => {
+            fitMobileWindow(w);
+        });
+    });
+
     function openWindow(windowElement, index) {
         if (!windowElement || index < 0 || index >= windowIds.length) return;
 
@@ -935,6 +1033,7 @@ document.addEventListener("DOMContentLoaded", () => {
         bringToFront(windowElement);
 
         addTile(index);
+        fitMobileWindow(windowElement);
     }
 
     function closeWindow(windowElement, index) {
